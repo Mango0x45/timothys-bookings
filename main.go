@@ -23,8 +23,12 @@ func main() {
 		templates[base] = template.Must(template.ParseFiles(file))
 	}
 	defer sqldb.db.Close()
+
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("POST /book", createbooking)
-	http.HandleFunc("/", root)
+	http.HandleFunc("GET /", root)
+
 	try(http.ListenAndServe(":6969", nil))
 
 }
@@ -66,11 +70,7 @@ func getHello(w http.ResponseWriter, r *http.Request) {
 }
 
 func setUpDatabase() SQLiteRepository {
-	db, err := sql.Open("sqlite3", ":memory:")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Print(db)
+	db := unwrap(sql.Open("sqlite3", ":memory:"))
 	m := SQLiteRepository{db}
 	m.migrate()
 	return m
