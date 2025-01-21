@@ -6,21 +6,29 @@ type SQLiteRepository struct {
 	db *sql.DB
 }
 
-func (r *SQLiteRepository) migrate() error {
-	query := `
-	CREATE TABLE bookings
+func (r *SQLiteRepository) migrate() {
+	query1 := `
+	CREATE TABLE "Room" (
+		"Room_ID" INTEGER NOT NULL UNIQUE,
+		"Room_name" TEXT NOT NULL,
+		PRIMARY KEY("Room_ID" AUTOINCREMENT)
+ 	);
+	`
+	unwrap(r.db.Exec(query1))
+
+	query2 := `
+	CREATE TABLE "Booking"
 	(
-		id INTEGER
-		primary key AUTOINCREMENT,
-		book_name  TEXT     NOT NULL,
-		capacity   INTEGER  NOT NULL,
-		room_id    INTEGER  NOT NULL,
-		start_time DATETIME NOT NULL
+		"User_Name" TEXT NOT NULL
+		"Booking_ID" INTEGER NOT NULL UNIQUE,
+		"Room_ID" INTEGER NOT NULL UNIQUE,
+		"Start_time" INTEGER NOT NULL,
+		PRIMARY KEY("Booking_ID" AUTOINCREMENT),
+		FOREIGN KEY("Room_ID") REFERENCES "Room "("Room_ID"),
 	);
 	`
 
-	_, err := r.db.Exec(query)
-	return err
+	unwrap(r.db.Exec(query2))
 }
 
 type Booking struct {
