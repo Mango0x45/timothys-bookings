@@ -1,21 +1,16 @@
 package main
 
 import (
-<<<<<<< Updated upstream
+	"database/sql"
+	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-=======
-	"database/sql"
-	"fmt"
-	"io"
-	"log"
-	"net/http"
 
 	_ "github.com/mattn/go-sqlite3"
->>>>>>> Stashed changes
 )
 
 var templates = make(map[string]*template.Template)
@@ -26,7 +21,7 @@ func main() {
 		file := "templates/" + e.Name()
 		templates[base] = template.Must(template.ParseFiles(file))
 	}
-
+	setUpDatabase()
 	http.HandleFunc("/", root)
 	try(http.ListenAndServe(":6969", nil))
 }
@@ -44,13 +39,6 @@ func unwrap[T any](x T, err error) T {
 
 func root(w http.ResponseWriter, r *http.Request) {
 	try(templates["index"].Execute(w, nil))
-}
-	fmt.Println("Hello, World")
-	setUpDatabase()
-	http.HandleFunc("/hello", getHello)
-	err := http.ListenAndServe(":6969", nil)
-	fmt.Print(err)
-
 }
 
 func getHello(w http.ResponseWriter, r *http.Request) {
