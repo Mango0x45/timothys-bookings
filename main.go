@@ -26,7 +26,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
-	http.HandleFunc("POST /book", createbooking)
+	http.HandleFunc("GET /book", createbooking)
 	http.HandleFunc("GET /", root)
 	http.HandleFunc("GET /book", booking)
 

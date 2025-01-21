@@ -1,6 +1,10 @@
 package main
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+	"log"
+)
 
 type SQLiteRepository struct {
 	db *sql.DB
@@ -29,6 +33,21 @@ func (r *SQLiteRepository) migrate() {
 	`
 
 	unwrap(r.db.Exec(query2))
+
+	query3 := `
+	INSERT INTO Room (Room_name) VALUES ('Oliver');
+	INSERT INTO Room (Room_name) VALUES ('Amelia');
+	INSERT INTO Room (Room_name) VALUES ('Ethan');
+	INSERT INTO Room (Room_name) VALUES ('Sophia');
+	INSERT INTO Room (Room_name) VALUES ('Liam');
+	INSERT INTO Room (Room_name) VALUES ('Isabella');
+	INSERT INTO Room (Room_name) VALUES ('Noah');
+	INSERT INTO Room (Room_name) VALUES ('Mia');
+	INSERT INTO Room (Room_name) VALUES ('Lucas');
+	INSERT INTO Room (Room_name) VALUES ('Charlotte');
+	`
+
+	unwrap(r.db.Exec(query3))
 }
 
 type Booking struct {
@@ -41,7 +60,7 @@ type Booking struct {
 
 func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 	query := `
-		INSERT INTO bookings (book_name, capacity, room_id, start_time)
+		INSERT INTO Booking (book_name, capacity, room_id, start_time)
 		VALUES (?, ?, ?, ?)
 	`
 	_, err := r.db.Exec(query, booking.BookName, booking.Capacity,
@@ -52,7 +71,7 @@ func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 func (r *SQLiteRepository) GetAllBookings() ([]Booking, error) {
 	query := `
 		SELECT id, book_name, capacity, room_id, start_time
-		FROM bookings
+		FROM Booking
 	`
 	rows := unwrap(r.db.Query(query))
 
