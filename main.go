@@ -28,6 +28,7 @@ func main() {
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
 	http.HandleFunc("POST /book", createbooking)
 	http.HandleFunc("GET /", root)
+	http.HandleFunc("GET /book", booking)
 
 	try(http.ListenAndServe(":6969", nil))
 
@@ -74,4 +75,15 @@ func setUpDatabase() SQLiteRepository {
 	m := SQLiteRepository{db}
 	m.migrate()
 	return m
+}
+
+func booking(w http.ResponseWriter, r *http.Request) {
+	// c, err := r.Cookie("user")
+	// if err != nil {
+	// 	switch {
+	// 	case errors.Is(err, http.ErrNoCookie):
+	// 		http.Error(w, "Cookie not found", http.StatusBadRequest)
+	// 	}
+	// }
+	try(templates["book"].Execute(w, nil))
 }
