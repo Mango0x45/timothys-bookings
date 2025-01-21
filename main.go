@@ -55,7 +55,6 @@ func createbooking(w http.ResponseWriter, r *http.Request) {
 	booking := Booking{
 		1,
 		"NAME",
-		2,
 		1,
 		"2025-01-25 14:30:00",
 	}
