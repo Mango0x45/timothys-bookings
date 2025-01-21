@@ -31,3 +31,9 @@ button {
 	width: 95%;
 	font-size: 1.2rem;
 }
+
+table, td, th {
+	border: 1px solid black;
+	border-radius: 10px;
+
+}
