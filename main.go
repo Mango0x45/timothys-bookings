@@ -85,5 +85,6 @@ func booking(w http.ResponseWriter, r *http.Request) {
 	// 		http.Error(w, "Cookie not found", http.StatusBadRequest)
 	// 	}
 	// }
+
 	try(templates["book"].Execute(w, nil))
 }
