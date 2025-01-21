@@ -8,16 +8,16 @@ type SQLiteRepository struct {
 
 func (r *SQLiteRepository) migrate() error {
 	query := `
-	create table bookings
+	CREATE TABLE bookings
 	(
-    id INTEGER
-    primary key autoincrement,
-    book_name  TEXT     not null,
-    capacity   INTEGER  not null,
-    room_id    INTEGER  not null,
-    start_time DATETIME not null
+		id INTEGER
+		primary key AUTOINCREMENT,
+		book_name  TEXT     NOT NULL,
+		capacity   INTEGER  NOT NULL,
+		room_id    INTEGER  NOT NULL,
+		start_time DATETIME NOT NULL
 	);
-    `
+	`
 
 	_, err := r.db.Exec(query)
 	return err
@@ -33,35 +33,28 @@ type Booking struct {
 
 func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 	query := `
-	INSERT INTO bookings (book_name, capacity, room_id, start_time)
-	VALUES (?, ?, ?, ?)
+		INSERT INTO bookings (book_name, capacity, room_id, start_time)
+		VALUES (?, ?, ?, ?)
 	`
-	_, err := r.db.Exec(query, booking.BookName, booking.Capacity, booking.RoomID, booking.StartTime)
+	_, err := r.db.Exec(query, booking.BookName, booking.Capacity,
+		booking.RoomID, booking.StartTime)
 	return err
 }
 
 func (r *SQLiteRepository) GetAllBookings() ([]Booking, error) {
 	query := `
-	SELECT id, book_name, capacity, room_id, start_time
-	FROM bookings
+		SELECT id, book_name, capacity, room_id, start_time
+		FROM bookings
 	`
-	rows, err := r.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
+	rows := unwrap(r.db.Query(query))
 
 	var bookings []Booking
 	for rows.Next() {
 		var booking Booking
-		err := rows.Scan(&booking.ID, &booking.BookName, &booking.Capacity, &booking.RoomID, &booking.StartTime)
-		if err != nil {
-			return nil, err
-		}
+		try(rows.Scan(&booking.ID, &booking.BookName, &booking.Capacity,
+			&booking.RoomID, &booking.StartTime))
 		bookings = append(bookings, booking)
 	}
-	if err = rows.Err(); err != nil {
-		return nil, err
-	}
+	try(rows.Err())
 	return bookings, nil
-
 }
