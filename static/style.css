@@ -23,11 +23,13 @@ body > * {
 	margin: auto;
 }
 
-button {
+a.button {
 	border: 2px solid var(--fg);
 	background-color: var(--fg);
 	border-radius: 12px;
 	color: var(--bg);
 	width: 95%;
 	font-size: 1.2rem;
+	text-align: center;
+	text-decoration: none;
 }
