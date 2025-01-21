@@ -50,15 +50,15 @@ func (r *SQLiteRepository) migrate() {
 
 type Booking struct {
 	ID        int
-	BookName  string
+	BookName  int
 	RoomID    int
 	StartTime string
 }
 
 func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 	query := `
-		INSERT INTO Booking (book_name, capacity, room_id, start_time)
-		VALUES (?, ?, ?, ?)
+		INSERT INTO Booking (user_name, room_id, start_time)
+		VALUES (?, ?, ?)
 	`
 	_, err := r.db.Exec(query, booking.BookName,
 		booking.RoomID, booking.StartTime)
@@ -67,7 +67,7 @@ func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 
 func (r *SQLiteRepository) GetAllBookings() ([]Booking, error) {
 	query := `
-		SELECT id, book_name, capacity, room_id, start_time
+		SELECT *
 		FROM Booking
 	`
 	rows := unwrap(r.db.Query(query))

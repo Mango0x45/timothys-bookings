@@ -26,7 +26,7 @@ func main() {
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
-	http.HandleFunc("GET /book", createbooking)
+	http.HandleFunc("POST /book", createbooking)
 	http.HandleFunc("GET /", root)
 	http.HandleFunc("GET /book", booking)
 
@@ -54,13 +54,13 @@ func createbooking(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(x)
 	booking := Booking{
 		1,
-		"NAME",
+		1,
 		1,
 		"2025-01-25 14:30:00",
 	}
 	sqldb.RegisterBooking(booking)
 	bookings := unwrap(sqldb.GetAllBookings())
-	fmt.Fprintf(w, "%s book", bookings[0].BookName)
+	fmt.Fprintf(w, "%s book", bookings)
 
 }
 
