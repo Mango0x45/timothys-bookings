@@ -60,7 +60,7 @@ func (r *SQLiteRepository) RegisterBooking(booking Booking) error {
 		INSERT INTO Booking (book_name, capacity, room_id, start_time)
 		VALUES (?, ?, ?, ?)
 	`
-	_, err := r.db.Exec(query, booking.BookName, booking.Capacity,
+	_, err := r.db.Exec(query, booking.BookName,
 		booking.RoomID, booking.StartTime)
 	return err
 }
@@ -75,7 +75,7 @@ func (r *SQLiteRepository) GetAllBookings() ([]Booking, error) {
 	var bookings []Booking
 	for rows.Next() {
 		var booking Booking
-		try(rows.Scan(&booking.ID, &booking.BookName, &booking.Capacity,
+		try(rows.Scan(&booking.ID, &booking.BookName,
 			&booking.RoomID, &booking.StartTime))
 		bookings = append(bookings, booking)
 	}
