@@ -2,8 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
 )
 
 type SQLiteRepository struct {
@@ -53,7 +51,6 @@ func (r *SQLiteRepository) migrate() {
 type Booking struct {
 	ID        int
 	BookName  string
-	Capacity  int
 	RoomID    int
 	StartTime string
 }
