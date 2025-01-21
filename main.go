@@ -1,22 +1,37 @@
 package main
 
 import (
-	"fmt"
-	"io"
+	"html/template"
+	"log"
 	"net/http"
+	"os"
+	"strings"
 )
 
+var templates = make(map[string]*template.Template)
+
 func main() {
+	for _, e := range unwrap(os.ReadDir("./templates")) {
+		base := strings.TrimSuffix(e.Name(), ".html")
+		file := "templates/" + e.Name()
+		templates[base] = template.Must(template.ParseFiles(file))
+	}
 
-	fmt.Println("Hello, World")
-	http.HandleFunc("/hello", getHello)
-	err := http.ListenAndServe(":6969", nil)
-	fmt.Print(err)
-
+	http.HandleFunc("/", root)
+	try(http.ListenAndServe(":6969", nil))
 }
 
-func getHello(w http.ResponseWriter, r *http.Request) {
+func try(err error) {
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
 
-	fmt.Printf("Got /hello request\n")
-	io.WriteString(w, "Hello, HTTP!\n")
+func unwrap[T any](x T, err error) T {
+	try(err)
+	return x
+}
+
+func root(w http.ResponseWriter, r *http.Request) {
+	try(templates["index"].Execute(w, nil))
 }
