@@ -19,12 +19,12 @@ func (r *SQLiteRepository) migrate() {
 	query2 := `
 	CREATE TABLE "Booking"
 	(
-		"User_Name" TEXT NOT NULL
+		"User_Name" TEXT NOT NULL,
 		"Booking_ID" INTEGER NOT NULL UNIQUE,
 		"Room_ID" INTEGER NOT NULL UNIQUE,
 		"Start_time" INTEGER NOT NULL,
 		PRIMARY KEY("Booking_ID" AUTOINCREMENT),
-		FOREIGN KEY("Room_ID") REFERENCES "Room "("Room_ID"),
+		FOREIGN KEY("Room_ID") REFERENCES "Room" ("Room_ID")
 	);
 	`
 
